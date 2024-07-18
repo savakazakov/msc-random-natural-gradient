@@ -11,8 +11,8 @@ The first algorithm is called "Random Natural Gradient" (RNG) and requires the c
 
 The second algorithm is called "Stochastic-Coordinate Quantum Natural Gradient" (SC-QNG). In this algorithm, at every iteration, only a portion of the total parameters are considered and the reduced quantum Fisher information matrix is constructed for this subset. The main intuition behind this algorithm is that only an (unknown) subset of the total parameters can result in an independent change of the underlying quantum state. As such, using all possible resources results in an extra overhead in the classical optimization.
 
-
 ## Installation
+
 pip install -r requirements.txt
 
 ## Instructions
