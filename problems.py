@@ -28,7 +28,7 @@ class MaxCut:
 
         maxcut = Maxcut(self.w)
         qp = maxcut.to_quadratic_program()
-        qubitOp, offset = qp.to_ising()
+        qubitOp, offset = qp.to_isning()
 
         return qubitOp, offset
 

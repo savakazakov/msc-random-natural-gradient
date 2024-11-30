@@ -6,11 +6,10 @@ import networkx as nx
 from optimizers import Optimizers
 from problems import MaxCut
 
-seed = 3
+seed = 42
 np.random.seed(seed)
 
-
-# Problem properties
+# Problem properties.
 weighted = True
 regularity = 3
 number_of_qubits = 8
@@ -18,8 +17,7 @@ problem = MaxCut(number_of_qubits, regularity=regularity, weighted=weighted, see
 optimal_cost, optimal_strings = problem.optimal_cost_brute_force()
 qubitOp, offset = problem.get_qubit_operator()
 
-
-# Properties of the ansatz
+# Properties of the ansatz.
 layers = 3
 maxiter = 500
 eta = 0.05
@@ -28,7 +26,7 @@ entanglement_gates = ["cz"]
 entanglement = "linear"
 ansatz = "HEA"
 
-# Properties of the measurement
+# Properties of the measurement.
 random_basis_layers = 1
 single_qubit_gates_measurement = ["rz", "ry"]
 entanglement_gates_measurement = ["cx"]
@@ -46,13 +44,9 @@ print(
     f"The optimal cost is {optimal_cost} and the strings corresponding to the optimal solution are {optimal_strings}"
 )
 
-
 number_of_parameters = 2 * (layers + 1) * number_of_qubits
-
-
 reduced_parameters = int(number_of_parameters / 2)
 thetas = [np.random.uniform(0, 2 * np.pi) for _ in range(number_of_parameters)]
-
 
 optimizer_statevector = Optimizers(
     number_of_qubits,
@@ -66,9 +60,8 @@ optimizer_statevector = Optimizers(
     problem={"type": "MaxCut", "operator": qubitOp, "offset": offset},
 )
 
-
 # Gradient Descent:
-# vanilla_gradient_descent_exp_values = optimizer_statevector.gradient_descent(eta=eta)
+vanilla_gradient_descent_exp_values = optimizer_statevector.gradient_descent(eta=eta)
 
 # Random Natural Gradient:
 random_natural_gradient_exp_values = optimizer_statevector.random_natural_gradient(
@@ -76,13 +69,12 @@ random_natural_gradient_exp_values = optimizer_statevector.random_natural_gradie
 )
 
 # Quantum Natural Gradient:
-# quantum_natural_gradient_exp_values = optimizer_statevector.quantum_natural_gradient(eta=eta)
+quantum_natural_gradient_exp_values = optimizer_statevector.quantum_natural_gradient(eta=eta)
 
 # Stochastic-Coordinate Quantum Natural Gradient
-# scqng_exp_values = optimizer_statevector.stochastic_quantum_natural_gradient(reduced_parameters, eta=eta)
+scqng_exp_values = optimizer_statevector.stochastic_quantum_natural_gradient(reduced_parameters, eta=eta)
 
 optimal_exp_values = [-optimal_cost for _ in range(maxiter + 1)]
-
 
 # And below we can plot how the optimizers compare with each other.
 
@@ -113,7 +105,6 @@ for i in range(len(tableau20)):
     r, g, b = tableau20[i]
     tableau20[i] = (r / 255.0, g / 255.0, b / 255.0)
 
-
 plt.figure(figsize=(10, 7.5))
 ax = plt.subplot(111)
 
@@ -123,7 +114,6 @@ ax.get_xaxis().tick_bottom()
 ax.get_yaxis().tick_left()
 
 plt.xticks(fontsize=14)
-
 
 plt.tick_params(
     axis="both",
@@ -136,9 +126,7 @@ plt.tick_params(
     labelleft="on",
 )
 
-
 optimal_exp_values = [-optimal_cost for _ in x_axis]
-
 
 plt.plot(
     x_axis,
@@ -148,6 +136,7 @@ plt.plot(
     color=tableau20[0],
     label="Vanilla Gradient Descent",
 )
+
 plt.plot(
     x_axis,
     random_natural_gradient_exp_values,
@@ -156,6 +145,7 @@ plt.plot(
     color=tableau20[2],
     label="Random Natural Gradient",
 )
+
 plt.plot(
     x_axis,
     quantum_natural_gradient_exp_values,
@@ -164,6 +154,7 @@ plt.plot(
     color=tableau20[4],
     label="Quantum Natural Gradient",
 )
+
 plt.plot(
     x_axis,
     optimal_exp_values,
@@ -171,7 +162,6 @@ plt.plot(
     color=tableau20[6],
     label="Optimal Expectation Value",
 )
-
 
 plt.xlabel("Optimization Iterations", fontsize=12)
 plt.ylabel("Expectation Value", fontsize=12)
